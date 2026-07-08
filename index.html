@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mekanik İmza | Kurumsal Mühendislik ve Tasarım Hizmetleri</title>
+    <!-- İkonlar ve Fontlar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1a365d; 
+            --secondary-color: #2b6cb0; 
+            --dark-bg: #1a202c; 
+            --light-bg: #f7fafc; 
+            --text-color: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+            --font-main: 'Montserrat', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-main); color: var(--text-color); line-height: 1.6; background-color: var(--white); }
+        .container { width: 85%; max-width: 1200px; margin: 0 auto; }
+        .section { padding: 80px 0; }
+        .bg-light { background-color: var(--light-bg); }
+        .bg-dark { background-color: var(--dark-bg); }
+        
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 15px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+        .section-title h2::after { content: ''; display: block; width: 60px; height: 4px; background-color: var(--secondary-color); margin: 10px auto 0 auto; }
+        .section-title.text-white h2 { color: var(--white); }
+        .section-title p { color: var(--text-light); font-size: 1.1rem; }
+        
+        /* Izgara (Grid) Yapısı */
+        .grid { display: grid; gap: 30px; }
+        .grid-1 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        
+        /* Kartlar ve Butonlar */
+        .card { background: var(--white); padding: 40px 30px; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-color); transition: transform 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-5px); }
+        .btn { display: inline-block; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: background 0.3s; cursor: pointer; border: none; }
+        .btn-primary { background-color: var(--secondary-color); color: var(--white); }
+        .btn-primary:hover { background-color: var(--primary-color); }
+        
+        /* Navigasyon Barı ve Amblem/İsim Stili */
+        .navbar { background-color: var(--white); position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        
+        .logo-nav-link { display: flex; align-items: center; text-decoration: none; gap: 10px; }
+        .nav-emblem { font-size: 1.8rem; color: var(--primary-color); display: flex; align-items: center; }
+        .nav-brand-name { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); letter-spacing: 1px; text-transform: uppercase; }
+        
+        .nav-menu a { text-decoration: none; color: var(--text-color); margin-left: 25px; font-weight: 500; transition: color 0.3s; }
+        .nav-menu a:hover { color: var(--secondary-color); }
+        .nav-menu .nav-btn { background-color: var(--primary-color); color: var(--white); padding: 8px 20px; border-radius: 4px; }
+        
+        .hero { 
+            height: 100vh; 
+            background-color: var(--dark-bg); 
+            position: relative; 
+            overflow: hidden; 
+            padding-top: 80px; 
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 24px 24px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-content-wrapper {
+            display: grid;
+            grid-template-columns: 45% 55%;
+            align-items: center;
+            height: 100%;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        .slide-text {
+            color: var(--white);
+            padding: 40px;
+            background: rgba(26, 32, 44, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.45);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .slide-text h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-text h1 span {
+            color: var(--secondary-color);
+        }
+
+        .slide-text p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #e2e8f0;
+        }
+
+        .slide.active .slide-text {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide-image-container {
+            position: relative;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #f0f4f8 0%, #d9e2ec 100%); 
+            border-radius: 12px;
+            border: 2px solid #b2c4d6;
+            padding: 45px 20px 20px 20px;
+            overflow: hidden;
+            box-shadow: inset 0 0 35px rgba(26, 54, 93, 0.15), 0 20px 45px rgba(0,0,0,0.45);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .slide.active .slide-image-container {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .cad-grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(43, 108, 176, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(43, 108, 176, 0.04) 1px, transparent 1px);
+            background-size: 25px 25px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cad-header-overlay {
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            color: #2d3748;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 5;
+            border-bottom: 1px dashed rgba(43, 108, 176, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .cad-badge {
+            background: rgba(43, 108, 176, 0.08);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(43, 108, 176, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cad-triad {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.85;
+        }
+
+        .slide-image-container img {
+            position: relative;
+            z-index: 2;
+            max-width: 95%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 6px;
+            filter: drop-shadow(0 15px 30px rgba(26, 54, 93, 0.25)); 
+            transition: transform 0.5s ease;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(26, 54, 93, 0.7);
+            color: var(--white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .slider-arrow:hover {
+            background: var(--secondary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-arrow-left { left: 20px; }
+        .slider-arrow-right { right: 20px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px; /* Nokta aralığı daraltıldı (14 nokta sığması için) */
+            z-index: 10;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .slider-dot.active {
+            background: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+        .stats-bar { background-color: var(--primary-color); padding: 40px 0; color: var(--white); text-align: center; border-bottom: 4px solid var(--secondary-color); }
+        .stats-bar .badge-certified { color: var(--secondary-color); font-weight: 600; font-size: 1rem; display: block; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-box h3 { font-size: 2.8rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 5px; }
+        .stats-bar p { font-size: 0.95rem; color: #e2e8f0; text-transform: uppercase; letter-spacing: 1px; }
+
+        .process-flow { display: flex; flex-direction: column; gap: 20px; position: relative; max-width: 900px; margin: 0 auto; }
+        .process-step { display: flex; align-items: flex-start; background: var(--white); padding: 25px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-left: 5px solid var(--secondary-color); transition: transform 0.2s; }
+        .process-step:hover { transform: translateX(5px); }
+        .step-num { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); background: var(--light-bg); min-width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 20px; border: 2px solid var(--secondary-color); }
+        .step-text h3 { color: var(--primary-color); font-size: 1.25rem; margin-bottom: 5px; }
+        .step-text p { color: var(--text-color); font-size: 0.95rem; }
+
+        .team-member { text-align: center; background: #ffffff; padding: 25px 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: flex-start; height: 100%; }
+        .member-img-placeholder { width: 100px; height: 100px; background-color: var(--light-bg); border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: var(--text-light); border: 2px solid var(--secondary-color); flex-shrink: 0; }
+        .member-img { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px auto; display: block; object-fit: cover; border: 2px solid var(--secondary-color); flex-shrink: 0; }
+        .team-member h3 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 5px; font-weight: 700; }
+        .team-member .role { color: var(--secondary-color); font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+        .team-member .uni { color: var(--text-light); font-size: 0.85rem; margin-bottom: 12px; font-style: italic; }
+        .team-member .desc { color: var(--text-color); font-size: 0.85rem; line-height: 1.5; text-align: justify; text-align-last: center; margin-top: auto; border-top: 1px dashed #cbd5e0; padding-top: 10px; }
+        
+        .info-item { display: flex; align-items: center; margin-bottom: 20px; }
+        .info-item i { font-size: 1.5rem; color: var(--secondary-color); margin-right: 15px; }
+        .contact-form { display: flex; flex-direction: column; }
+        .contact-form input, .contact-form textarea { padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: var(--font-main); }
+
+        .logo-footer-container { text-align: center; margin-top: 30px; width: 100%; }
+        .footer-logo { max-width: 180px; height: auto; }
+
+        .footer { background-color: var(--dark-bg); color: #a0aec0; padding: 40px 0; font-size: 0.9rem; }
+        .footer-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .social-links a { color: #a0aec0; margin-left: 15px; font-size: 1.2rem; transition: color 0.3s; }
+        .social-links a:hover { color: var(--secondary-color); }
+        
+        .card-icon { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 20px; }
+        .card h3 { color: var(--primary-color); margin-bottom: 12px; font-size: 1.25rem; }
+        .card p { font-size: 0.95rem; color: var(--text-color); flex-grow: 1; }
+        .software-badge { font-weight: 700; color: var(--secondary-color); display: block; margin-top: 10px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .title-icon { font-size: 2.2rem; color: var(--secondary-color); margin-bottom: 15px; display: block; text-align: center; }
+        
+        @media (max-width: 992px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { 
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } 
+            .nav-menu { display: none; } 
+            .hero { height: auto; min-height: 100vh; padding-bottom: 60px; } 
+            .slide-content-wrapper { grid-template-columns: 1fr; gap: 20px; padding: 20px 0; } 
+            .slide-image-container { height: 40vh; } 
+            .slide-text { padding: 20px; } 
+            .slider-arrow { width: 35px; height: 35px; font-size: 0.9rem; } 
+            .slider-arrow-left { left: 5px; } 
+            .slider-arrow-right { right: 5px; } 
+            .stat-box { margin-bottom: 20px; } 
+            .footer-wrapper { flex-direction: column; gap: 15px; text-align: center; }
+            .social-links { margin-left: 0; }
+            .nav-brand-name { font-size: 1.2rem; }
+            .footer-logo { max-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="#anasayfa" class="logo-nav-link">
+                    <span class="nav-emblem"><i class="fa-solid fa-compass-drafting"></i></span>
+                    <span class="nav-brand-name">Mekanik İmza</span>
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <a href="#anasayfa">Ana Sayfa</a>
+                <a href="#kurumsal">Kurumsal</a>
+                <a href="#hizmetler">Hizmetler</a>
+                <a href="#surec">İşleyiş</a>
+                <a href="#ekibimiz">Ekibimiz</a>
+                <a href="#iletisim" class="nav-btn">İletişim</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="anasayfa" class="hero">
+        <div class="slider-container">
+            
+            <!-- Slayt 1: Tek Dingil Römork Şase -->
+            <div class="slide active">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Askeri ve Endüstriyel<br><span>Römork Şaseleri</span></h1>
+                        <p>Ağır hizmet şartlarına, dinamik gerilmelere ve her türlü arazi koşuluna tam mukavemet gösteren, statik ve dinamik FEA doğrulamaları yapılmış bilgisayar destekli şase tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D ASSEMBLY</span>
+                            <span class="cad-scale">REF: SH-240 / REV_A</span>
+                        </div>
+                        <img src="tekdingil.jpg" alt="Tek Dingilli Ağır Hizmet Şase Tasarımı">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <text x="22" y="18" fill="#2f855a" font-size="10" font-family="monospace">Y</text>
+                                <line x1="15" y1="45" x2="45" y2="45" stroke="#c53030" stroke-width="2" />
+                                <polygon points="50,45 44,42 44,48" fill="#c53030" />
+                                <text x="44" y="38" fill="#c53030" font-size="10" font-family="monospace">X</text>
+                                <line x1="15" y1="45" x2="30" y2="30" stroke="#2b6cb0" stroke-width="2" />
+                                <polygon points="34,26 28,29 31,34" fill="#2b6cb0" />
+                                <text x="34" y="38" fill="#2b6cb0" font-size="10" font-family="monospace">Z</text>
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 2: Çift Dingil Konteyner Römorku -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Özel Üst Yapı ve<br><span>Konteyner Römorkları</span></h1>
+                        <p>Ağır endüstriyel jeneratörler ve özel konteyner sistemleri için titreşim sönümleyici, çift dingilli özel römork tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D ASSEMBLY</span>
+                            <span class="cad-scale">REF: CT-800 / SH_1</span>
+                        </div>
+                        <img src="ciftdingil.jpg" alt="Çift Dingil Konteyner Römorku">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 3: Damperli Mavi Römork -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Mekanik ve Sac Metal<br><span>Damperli Üst Yapılar</span></h1>
+                        <p>Yüksek hacim kapasiteli, imalat kolaylığı ve kaynak analizleri tamamlanmış, DFM prensiplerine tam uyumlu sac metal damperli römork montajları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D ASSEMBLY</span>
+                            <span class="cad-scale">REF: DM-400 / REV_B</span>
+                        </div>
+                        <img src="tarim.png" alt="Mavi Sac Metal Damperli Römork Projesi">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 4: Özel Lojistik ve Yük Platformları -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Özel Lojistik ve<br><span>Yük Platformları</span></h1>
+                        <p>İş makineleri ve ağır yüklerin güvenle taşınması için milimetrik toleranslandırma ve katlanır rampalı mekanizma tasarımlarına sahip taşıma platformları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D ASSEMBLY</span>
+                            <span class="cad-scale">REF: PL-120 / REV_A</span>
+                        </div>
+                        <img src="3d.webp" alt="Askeri Taşıma Platformu ve Katlanır Rampa Tasarımı">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 5: Modüler Rack Kabin -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Veri Merkezleri İçin<br><span>Premium Rack Kabinler</span></h1>
+                        <p>IT ve haberleşme altyapıları için termal havalandırma optimizasyonu yapılmış, şasi bütünlüğü korunmuş, estetik ve modüler montajlı 19" rack kabin tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D PART</span>
+                            <span class="cad-scale">REF: RC-42U / REV_C</span>
+                        </div>
+                        <img src="kabin.jpg" alt="Endüstriyel Veri Merkezi Rack Kabin Modeli">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 6: Endüstriyel Sunucu Kabini (YENİ) -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Profesyonel Ağ ve<br><span>Sunucu Kabinleri</span></h1>
+                        <p>Kurumsal IT altyapıları için dış etkenlere dayanıklı, ısı yönetimi optimize edilmiş ve akıllı kablolama imkanı sunan donanımlı sunucu kabini tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS 3D PART</span>
+                            <span class="cad-scale">REF: RK-100 / S: 1:10</span>
+                        </div>
+                        <img src="rack.jpg" alt="Profesyonel Sunucu Kabini Tasarımı">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 7: Demonte Montaj Analizi (YENİ) -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Demonte (Exploded)<br><span>Montaj Kılavuzları</span></h1>
+                        <p>İmalat ve montaj hatları için parçaların, fan ünitelerinin ve mekanizmaların tek tek haritalandırıldığı, hata payını sıfırlayan patlatılmış detaylı teknik resimler.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container" style="background: #ffffff;">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-layer-group"></i> SOLIDWORKS EXPLODED VIEW</span>
+                            <span class="cad-scale">REF: EX-800 / SH_1</span>
+                        </div>
+                        <img src="serverkabin.jfif" alt="Demonte Kabin İmalat Analizi" style="filter: none; max-height: 85%;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 8: Profil Pulluk -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Tarım Mekanizasyonu ve<br><span>Profil Pulluk Ar-Ge Çalışmaları</span></h1>
+                        <p>Toprak sürtünme dirençleri hesaplanmış, dayanımı yüksek çelik alaşım profillerle yapılandırılmış ve saha şartlarında maksimum performans sunan pulluk gövde mekanizmaları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS ASSEMBLY</span>
+                            <span class="cad-scale">REF: PL-4 / REV_A</span>
+                        </div>
+                        <img src="tarim2.jpg" alt="4'lü Profil Tarım Pulluk CAD Çizimi">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 9: Ekim Makinesi -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Pnömatik ve Mekanik<br><span>Ekim Makineleri (Mibzer)</span></h1>
+                        <p>Tohum döküm hassasiyeti ve derinlik ayar mekanizmaları kusursuz projelendirilmiş, modern çiftçi gereksinimlerine hitap eden profesyonel ekim makinesi tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS ASSEMBLY</span>
+                            <span class="cad-scale">REF: EB-16 / REV_D</span>
+                        </div>
+                        <img src="tarim3.jpg" alt="Pnömatik Mibzer Tarım Makinesi Ar-Ge Tasarımı">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 10: Döner Tırmık (YENİ) -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Toprak İşleme ve<br><span>Döner Tırmık Mekanizmaları</span></h1>
+                        <p>Rotasyonel hareket ve diş yapısı dinamik yüklere göre simüle edilmiş, minimum çeki gücü gereksinimiyle maksimum toprak ufalama verimi sağlayan rotovatör tasarımları.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-cube"></i> SOLIDWORKS ASSEMBLY</span>
+                            <span class="cad-scale">REF: TR-300 / REV_B</span>
+                        </div>
+                        <img src="tarim4.jpg" alt="Döner Tırmık Tarım Makinesi 3D Tasarımı">
+                        <div class="cad-triad">
+                            <svg width="50" height="50" viewBox="0 0 60 60">
+                                <line x1="15" y1="45" x2="15" y2="15" stroke="#2f855a" stroke-width="2" />
+                                <polygon points="15,10 12,16 18,16" fill="#2f855a" />
+                                <circle cx="15" cy="45" r="3" fill="#4a5568" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 11: AutoCAD Pano Şeması -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Endüstriyel Otomasyon ve<br><span>Elektrik Pano Şemaları</span></h1>
+                        <p>IEC ve EN standartlarına tam uyumlu; AutoCAD ve EPlan ile milimetrik hazırlanan şalt malzeme yerleşimleri, kablolama yolları ve tek hat şeması çizimleri.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container" style="background: #000000; border-color: #4a5568;">
+                        <div class="cad-grid-lines" style="background-image: linear-gradient(to right, rgba(0, 255, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 255, 0, 0.04) 1px, transparent 1px);"></div>
+                        <div class="cad-header-overlay" style="color: #a0aec0; border-bottom-color: rgba(255,255,255,0.15);">
+                            <span class="cad-badge" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: #e2e8f0;"><i class="fa-solid fa-pen-ruler"></i> AUTOCAD 2D SCHEMATIC</span>
+                            <span class="cad-scale">REF: EL-OT_01</span>
+                        </div>
+                        <img src="pano.webp" alt="Endüstriyel Otomasyon Panosu AutoCAD Çizimi" style="filter: drop-shadow(0 0 15px rgba(0,255,0,0.1));">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 12: Elektrik Devre Planı -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Kuvvetli ve Zayıf Akım<br><span>Elektrik Tesisatı Projeleri</span></h1>
+                        <p>Yüksek emniyet, doğru kontaktör/şalter seçimi ve kontrol mekanizmalarıyla donatılmış, resmi kurumların ve dağıtım şirketlerinin şartnamelerine kusursuz uyumlu planlama.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container" style="background: #000000; border-color: #4a5568;">
+                        <div class="cad-grid-lines" style="background-image: linear-gradient(to right, rgba(0, 255, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 255, 0, 0.04) 1px, transparent 1px);"></div>
+                        <div class="cad-header-overlay" style="color: #a0aec0; border-bottom-color: rgba(255,255,255,0.15);">
+                            <span class="cad-badge" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: #e2e8f0;"><i class="fa-solid fa-pen-ruler"></i> AUTOCAD 2D PLAN</span>
+                            <span class="cad-scale">REF: EL-DY_02</span>
+                        </div>
+                        <img src="elektrik.jpg" alt="Elektrik Tesisat Planı" style="filter: drop-shadow(0 0 15px rgba(0,255,0,0.1));">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 13: Evsel Doğal Gaz Projesi -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Güvenli ve Standartlara Uygun<br><span>Doğal Gaz Projelendirme</span></h1>
+                        <p>Evsel ve bina tesisatları için güvenli, yönetmeliklere tam uyumlu ve enerji verimliliği sağlayan detaylı doğal gaz iç tesisat projeleri.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay">
+                            <span class="cad-badge"><i class="fa-solid fa-pen-ruler"></i> AUTOCAD 2D PLAN</span>
+                            <span class="cad-scale">REF: DG-300 / REV_B</span>
+                        </div>
+                        <img src="dogalgaz.jpg" alt="Doğalgaz Tesisat Projesi">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slayt 14: Endüstriyel Doğal Gaz Projesi (YENİ) -->
+            <div class="slide">
+                <div class="container slide-content-wrapper">
+                    <div class="slide-text">
+                        <h1>Endüstriyel Tesis<br><span>Doğal Gaz Planlaması</span></h1>
+                        <p>Fabrika, üretim sahaları ve büyük ölçekli tesisler için kapasite hesaplamaları milimetrik yapılmış, güvenli ve verimli endüstriyel doğal gaz hat projeleri.</p>
+                        <a href="#hizmetler" class="btn btn-primary">Hizmetlerimizi İnceleyin</a>
+                    </div>
+                    <div class="slide-image-container" style="background: #1a202c; border-color: #4a5568;">
+                        <div class="cad-grid-lines"></div>
+                        <div class="cad-header-overlay" style="color: #a0aec0;">
+                            <span class="cad-badge" style="background: rgba(255,255,255,0.05); color: #e2e8f0;"><i class="fa-solid fa-pen-ruler"></i> AUTOCAD 2D PLAN</span>
+                            <span class="cad-scale">REF: DG-IND-01 / Q=2000</span>
+                        </div>
+                        <img src="dogalgaz2.png" alt="Endüstriyel Doğalgaz Projesi Çizimi" style="filter: drop-shadow(0 0 15px rgba(0,0,0,0.5));">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Kontrol Butonları -->
+            <button class="slider-arrow slider-arrow-left" onclick="changeSlide(-1)" aria-label="Önceki Slayt"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-arrow slider-arrow-right" onclick="changeSlide(1)" aria-label="Sonraki Slayt"><i class="fa-solid fa-chevron-right"></i></button>
+
+            <!-- Gösterge Noktaları (14 Adet) -->
+            <div class="slider-dots">
+                <span class="slider-dot active" onclick="setCurrentSlide(0)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(1)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(2)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(3)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(4)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(5)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(6)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(7)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(8)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(9)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(10)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(11)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(12)"></span>
+                <span class="slider-dot" onclick="setCurrentSlide(13)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diğer Bölümler (İstatistik, Kurumsal, Hizmetler, Ekip, İletişim vs.) Alt Kısımda Devam Ediyor -->
+
+    <div class="stats-bar">
+        <div class="container grid grid-3">
+            <div class="stat-box">
+                <h3>8+</h3>
+                <p>Uzman Mühendis ve Teknik Kadro</p>
+            </div>
+            <div class="stat-box">
+                <h3>100%</h3>
+                <p>Üretime Uygunluk ve Doğrulama</p>
+            </div>
+            <div class="stat-box">
+                <h3>Mühendislik</h3>
+                <p>Yetki Belgeli Projelendirme</p>
+                <span class="badge-certified"><i class="fa-solid fa-shield-halved"></i> Resmi Onaylı</span>
+            </div>
+        </div>
+    </div>
+
+    <section id="kurumsal" class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kurumsal</h2>
+                <p style="font-weight: 600; color: var(--primary-color); font-size: 1.2rem; margin-top: 5px;">Geleceğin Mühendisliğine Atılan Güvenilir İmza.</p>
+            </div>
+            <div class="grid grid-2">
+                <div class="card">
+                    <i class="fa-solid fa-eye card-icon"></i>
+                    <h3>Vizyonumuz</h3>
+                    <p>Endüstriyel sınırları esnek, dinamik ve akıllı mühendislik çözümleriyle yeniden tanımlayarak; ulusal ve uluslararası düzeyde kalitesiyle referans gösterilen öncü bir teknoloji ve tasarım merkezi olmak.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-bullseye card-icon"></i>
+                    <h3>Misyonumuz</h3>
+                    <p>Karmaşık endüstriyel ve mekanik ihtiyaçları, yenilikçi yaklaşımımız ve analitik mühendislik çözümlerimizle kolaylaştırmak; iş ortaklarımızın projelerine değer katarak, tasarımdan doğrulamaya kadar her aşamada güven veren stratejik bir çözüm ortağı olmaktır.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hizmetler" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Hizmetlerimiz</h2>
+                <p>İleri mühendislik standartlarında, uçtan uca modern ve uzman tasarım çözümlerimiz.</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <i class="fa-solid fa-hard-drive card-icon"></i>
+                    <h3>Kabin Tasarımları</h3>
+                    <p>İş makineleri, endüstriyel üniteler ve özel araçlar için mukavemet kriterleri yüksek, ergonomik sac metal dış kabuk projeleri.</p>
+                    <span class="software-badge"><i class="fa-solid fa-cubes"></i> SolidWorks & Inventor ile 3D Tasarım</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-server card-icon"></i>
+                    <h3>Rack Kabin Tasarımları</h3>
+                    <p>Veri merkezleri ve IT altyapıları için havalandırma verimliliği ve modüler montaj kolaylığı odaklı rack kabin çözümleri.</p>
+                    <span class="software-badge"><i class="fa-solid fa-cubes"></i> SolidWorks & Inventor ile 3D Tasarım</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-truck-front card-icon"></i>
+                    <h3>Römork Tasarımları</h3>
+                    <p>Farklı tonaj ve lojistik ihtiyaçlara yanıt veren; üretime tam uyumlu (DFM) üst yapı ve komple gövde projeleri.</p>
+                    <span class="software-badge"><i class="fa-solid fa-cubes"></i> SolidWorks & Inventor ile 3D Tasarım</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-truck-ramp-box card-icon"></i>
+                    <h3>Römork Şase Tasarımları</h3>
+                    <p>Ağır yüklere ve dinamik burulmalara karşı mukavemet kriterleri bilgisayar destekli analizlerle doğrulanmış şase sistemleri.</p>
+                    <span class="software-badge"><i class="fa-solid fa-cubes"></i> SolidWorks & Inventor ile 3D Tasarım</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-bolt card-icon"></i>
+                    <h3>Elektrik Tesisatı Çizimi</h3>
+                    <p>Endüstriyel yapılar ve tesisler için kuvvetli akım, zayıf akım, aydınlatma ve topraklama projelerinin milimetrik planlaması.</p>
+                    <span class="software-badge"><i class="fa-solid fa-pen-ruler"></i> AutoCAD ile Profesyonel 2D Çizim</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-tractor card-icon"></i>
+                    <h3>Tarım Makineleri Tasarımı</h3>
+                    <p>Zorlu arazi koşullarına dayanıklı, yüksek verimlilik sunan inovatif tarım makineleri mekanizmaları ile yedek parça Ar-Ge çalışmaları.</p>
+                    <span class="software-badge"><i class="fa-solid fa-cubes"></i> SolidWorks & Inventor ile 3D Tasarım</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-square-poll-vertical card-icon"></i>
+                    <h3>Elektrik Pano Çizimleri</h3>
+                    <p>Otomasyon, dağıtım ve kumanda sistemlerine yönelik; şalt malzeme yerleşimi, kablo bağlantı şemaları ve iç düzen planlaması kusursuz elektrik pano projeleri çizimi.</p>
+                    <span class="software-badge"><i class="fa-solid fa-pen-ruler"></i> AutoCAD & EPlan ile Projelendirme</span>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-fire-flame-simple card-icon"></i>
+                    <h3>Doğal Gaz Projesi Çizimi</h3>
+                    <p>Yasal mevzuata ve dağıtım şirketi şartnamelerine %100 uyumlu; emniyetli ve enerji verimliliği yüksek endüstriyel veya evsel iç tesisat projeleri.</p>
+                    <span class="software-badge" style="color: #2f855a;"><i class="fa-solid fa-certificate"></i> Resmi Yetki Belgeli Projelendirme</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="surec" class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <i class="fa-solid fa-compass-drafting title-icon"></i>
+                <h2>Bizimle Süreç Nasıl İlerler?</h2>
+                <p>Projelerinizi kusursuz ve profesyonel bir metodolojiyle sıfırdan başarıya ulaştırıyoruz.</p>
+            </div>
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <h3>Proje Tanımı ve İhtiyaç Analizi</h3>
+                        <p>Projenizi bize tüm teknik detayları, beklentileri ve kısıtlamalarıyla anlatırsınız.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <h3>Üretilebilirlik Kontrolü (DFM)</h3>
+                        <p>Tasarım öncesi projenin fiziksel ve endüstriyel olarak üretilebilirliğini detaylıca kontrol ederiz.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <h3>Mühendislik Tasarımı</h3>
+                        <p>Uluslararası standartlara ve yazılımsal kurallara göre profesyonel tasarımı gerçekleştiririz.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-num">4</div>
+                    <div class="step-text">
+                        <h3>İnteraktif İletişim ve Optimizasyon</h3>
+                        <p>Sizinle interaktif iletişim halinde kalarak son düzeltmeleri yapar ve tasarımı kusursuz son haline getiririz.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-num">5</div>
+                    <div class="step-text">
+                        <h3>Teknik Dokümantasyon</h3>
+                        <p>İmalata tam uyumlu teknik resim, toleranslandırma ve detaylı montaj dokümantasyonunu hazırlarız.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-num">6</div>
+                    <div class="step-text">
+                        <h3>Proje Teslimi</h3>
+                        <p>Doğrulanmış, hatasız ve üretime hazır projeyi eksiksiz bir şekilde size teslim ederiz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section id="ekibimiz" class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Ekibimiz</h2>
+            <p>Projelerinize imza atan, alanında uzman kadromuz.</p>
+        </div>
+        <div class="grid grid-4">
+            
+            <!-- Mehmet Metin -->
+            <div class="team-member">
+                <img src="mehmet_4.jpeg" alt="Mehmet Metin" class="member-img">
+                <h3>Mehmet Metin</h3>
+                <p class="role">Tasarım Mühendisi</p>
+                <p class="uni">Uşak Üniversitesi</p>
+                <p class="desc">SolidWorks, AutoCAD ve Inventor programlarında uzmanlaşmış; mekanik tasarım ve üretim alanlarına son derece hakimdir.</p>
+            </div>
+            
+            <!-- Sedanur Metin -->
+            <div class="team-member">
+                <img src="sedanur_3.jpeg" alt="Sedanur Metin" class="member-img">
+                <h3>Sedanur Metin</h3>
+                <p class="role">Tasarım Mühendisi</p>
+                <p class="uni">Ankara Üniversitesi</p>
+                <p class="desc">SolidWorks, AutoCAD ve Inventor programlarında uzmanlaşmış; tarım makineleri için gerekli parçalar ya da makinelerin tasarım ve imalat süreçlerine hakimdir.</p>
+            </div>
+            
+            <!-- Hasan Metin -->
+            <div class="team-member">
+                <img src="hasan_4.jpeg" alt="Hasan Metin" class="member-img">
+                <h3>Hasan Metin</h3>
+                <p class="role">Elektrik-Elektronik Mühendisi</p>
+                <p class="uni">Bolu Abant İzzet Baysal Üniversitesi</p>
+                <p class="desc">Elektrik otomasyon ve pano çizimlerinde uzmanlaşmış; proje ve üretim alanlarında etkin rol almıştır.</p>
+            </div>
+
+            <!-- Büşra Oral Metin -->
+            <div class="team-member">
+                <div class="member-img-placeholder"><i class="fa-solid fa-user-gear"></i></div>
+                <h3>Büşra Oral Metin</h3>
+                <p class="role">Elektrik-Elektronik Mühendisi</p>
+                <p class="uni">Bolu Abant İzzet Baysal Üniversitesi</p>
+                <p class="desc">Elektrik tesisatı proje çizimi alanında uzmanlaşmıştır.</p>
+            </div>
+            
+            <!-- Doruk Duran -->
+            <div class="team-member">
+                <img src="doruk2_4.jpeg" alt="Doruk Duran" class="member-img">
+                <h3>Doruk Duran</h3>
+                <p class="role">Yüksek Makine Mühendisi</p>
+                <p class="uni">Gazi Üniversitesi</p>
+                <p class="desc">Alanında uzmanlaşmış, yüksek lisansını tamamlamış; tasarım ve üretim alanında kendini kanıtlamış olup SolidWorks, AutoCAD ve Inventor programlarında uzmandır.</p>
+            </div>
+            
+            <!-- Burak Karataş -->
+            <div class="team-member">
+                <img src="burak_3.jpeg" alt="Burak Karataş" class="member-img">
+                <h3>Burak Karataş</h3>
+                <p class="role">Makine Mühendisi</p>
+                <p class="uni">Kırıkkale Üniversitesi</p>
+                <p class="desc">Tasarım, üretim ve kalite alanlarında uzmanlaşmış; SolidWorks, AutoCAD ve Inventor programlarında ileri düzey yetkinliğe sahiptir.</p>
+            </div>
+            
+            <!-- Suzan Şimşek -->
+            <div class="team-member">
+                <img src="suzan_3.jpeg" alt="Suzan Şimşek" class="member-img">
+                <h3>Suzan Şimşek</h3>
+                <p class="role">Makine Mühendisi</p>
+                <p class="uni">Konya Teknik Üniversitesi</p>
+                <p class="desc">SolidWorks, AutoCAD ve Inventor programlarında uzmanlaşmış; doğal gaz projelerinde bulunmuş ve gerekli tecrübeye sahiptir.</p>
+            </div>
+            
+            <!-- Mert Kaan Aksu -->
+            <div class="team-member">
+                <img src="metr2_3.png" alt="Mert Kaan Aksu" class="member-img">
+                <h3>Mert Kaan Aksu</h3>
+                <p class="role">CMM Operatörü ve Kalite Uzmanı</p>
+                <p class="uni">Samsun Üniversitesi</p>
+                <p class="desc">CMM operatörü ve aynı zamanda inşaat teknikeri olup; kalite alanında kendini geliştirmiş uzman bir CMM operatörüdür.</p>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+    <section id="iletisim" class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>İletişim</h2>
+                <p>Projeleriniz için bizimle iletişime geçin.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div>
+                    <h3 style="margin-bottom:20px; color:var(--primary-color);">
+                        <i class="fa-solid fa-compass-drafting" style="color:var(--secondary-color); margin-right:8px;"></i>Kurumsal İrtibat
+                    </h3>
+                    <div class="info-item"><i class="fa-solid fa-location-dot"></i><span>Ankara, Türkiye</span></div>
+                    <div class="info-item"><i class="fa-solid fa-phone"></i><span>+90 534 742 04 25</span></div>
+                    <div class="info-item"><i class="fa-solid fa-envelope"></i><span>mekanikimza@gmail.com</span></div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Adınız Soyadınız" required>
+                    <input type="email" placeholder="E-posta Adresiniz" required>
+                    <textarea placeholder="Mesajınız" rows="4" required></textarea>
+                    <button type="submit" class="btn btn-primary">Mesaj Gönder</button>
+                    
+                    <div class="logo-footer-container">
+                        <img src="logo.png" alt="Mekanik İmza Logo" class="footer-logo">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-wrapper">
+            <p>&copy; 2026 mekanikimza.com - Tüm Hakları Saklıdır.</p>
+            <div class="social-links">
+                <a href="#" aria-label="LinkedIn Hesabımız"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" aria-label="X (Twitter) Hesabımız"><i class="fa-brands fa-x-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlideIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let autoPlayTimer;
+
+        function showSlide(index) {
+            if (index >= slides.length) {
+                currentSlideIdx = 0;
+            } else if (index < 0) {
+                currentSlideIdx = slides.length - 1;
+            } else {
+                currentSlideIdx = index;
+            }
+
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlideIdx) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                if (idx === currentSlideIdx) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            resetAutoPlay();
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlideIdx + direction);
+        }
+
+        function setCurrentSlide(index) {
+            showSlide(index);
+        }
+
+        function startAutoPlay() {
+            autoPlayTimer = setInterval(() => {
+                changeSlide(1);
+            }, 6000);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            startAutoPlay();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            startAutoPlay();
+        });
+    </script>
+</body>
+</html>
